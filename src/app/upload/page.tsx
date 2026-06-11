@@ -10,7 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import AtsScoreCard from "@/components/AtsScoreCard";
 import SkillGapChart from "@/components/SkillGapChart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Upload, FileText, Loader2, ChevronRight, X, AlertCircle, Sparkles, Lightbulb, MessageSquare, Briefcase, FileCode, ArrowUp } from "lucide-react";
+import { Upload, FileText, Loader2, ChevronRight, X, AlertCircle, Sparkles, Lightbulb, MessageSquare, Briefcase, FileCode } from "lucide-react";
 import { toast } from "sonner";
 import type { UploadResult } from "@/lib/types";
 
@@ -42,7 +42,7 @@ export default function UploadPage() {
 
   const selectFile = useCallback((f: File) => {
     if (!f.name.toLowerCase().endsWith(".pdf")) { toast.error("Only PDF files are accepted"); return; }
-    if (f.size > 5 * 1024 * 1024) { toast.error("File exceeds 5 MB limit"); return; }
+    if (f.size > 4 * 1024 * 1024) { toast.error("File exceeds 4 MB limit"); return; }
     setFile(f); setFileName(f.name); setError(null);
   }, []);
 
@@ -138,7 +138,7 @@ export default function UploadPage() {
               <label className="label-ui mb-3">
                 <Upload className="h-3.5 w-3.5 text-accent-blue" />
                 Resume PDF
-                <span className="text-xs font-normal text-muted-foreground/50 ml-1">max 5 MB</span>
+                <span className="text-xs font-normal text-muted-foreground/50 ml-1">max 4 MB</span>
               </label>
               <label
                 ref={dropRef}
@@ -177,7 +177,7 @@ export default function UploadPage() {
                       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted/50"><Upload className="h-5 w-5 text-muted-foreground/50" /></div>
                       <div className="text-center">
                         <p className="text-sm text-muted-foreground">{dragOver ? "Drop your PDF here" : "Drop PDF here or click to browse"}</p>
-                        <p className="text-xs text-muted-foreground/40 mt-0.5">PDF only, up to 5 MB</p>
+                        <p className="text-xs text-muted-foreground/40 mt-0.5">PDF only, up to 4 MB</p>
                       </div>
                     </motion.div>
                   )}

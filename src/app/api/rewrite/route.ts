@@ -25,6 +25,14 @@ export async function POST(request: Request) {
       missingKeywords,
     );
 
+    const rl = result as unknown as { _rateLimited?: boolean; _retryAfter?: number } | null;
+    if (rl?._rateLimited) {
+      return NextResponse.json({
+        success: false,
+        message: `AI service is temporarily rate-limited. Please try again in ${rl._retryAfter ?? 30} seconds.`,
+      }, { status: 429 });
+    }
+
     if (!result) {
       return NextResponse.json({
         success: false,

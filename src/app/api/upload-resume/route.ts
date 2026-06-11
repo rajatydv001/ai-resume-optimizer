@@ -6,7 +6,7 @@ import { extractKeywords } from "@/lib/extractKeywords";
 import { analyzeWithAI } from "@/lib/aiAnalysis";
 import type { UploadResult } from "@/lib/types";
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
+const MAX_FILE_SIZE = 4 * 1024 * 1024;
 
 const roleKeywords: Record<string, string[]> = {
   "frontend developer": [
@@ -112,7 +112,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Validate file type and size
+    // Validate file type (mime + extension)
     if (!file.name.toLowerCase().endsWith(".pdf")) {
       return NextResponse.json(
         { success: false, message: "Only PDF files are accepted" },
@@ -122,7 +122,17 @@ export async function POST(request: Request) {
 
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { success: false, message: "File exceeds 5 MB limit" },
+        { success: false, message: "File exceeds 4 MB limit" },
+        { status: 400 }
+      );
+    }
+
+    // Validate PDF magic bytes (%PDF-)
+    const headerBytes = new Uint8Array(await file.slice(0, 5).arrayBuffer());
+    const magic = String.fromCharCode(...headerBytes);
+    if (magic !== "%PDF-") {
+      return NextResponse.json(
+        { success: false, message: "File is not a valid PDF (missing PDF header)" },
         { status: 400 }
       );
     }
@@ -242,12 +252,15 @@ export async function POST(request: Request) {
 
     // AI-powered analysis (falls back to null if unavailable/fails)
     const aiResult = await analyzeWithAI(resumeText, usedRole, jobDescription);
+    const aiRateLimited = (aiResult as unknown as { _rateLimited?: boolean } | null)?._rateLimited === true;
 
     // Determine version group
-    let versionGroupId = resumeIdRaw;
-    if (versionGroupId) {
-      const original = await prisma.resume.findUnique({ where: { id: versionGroupId }, select: { versionGroupId: true } });
-      if (original?.versionGroupId) versionGroupId = original.versionGroupId;
+    let versionGroupId = "";
+    if (resumeIdRaw) {
+      const original = await prisma.resume.findUnique({ where: { id: resumeIdRaw }, select: { versionGroupId: true } });
+      if (original?.versionGroupId) {
+        versionGroupId = original.versionGroupId;
+      }
     }
 
     const resumeId = crypto.randomUUID();
@@ -294,10 +307,11 @@ export async function POST(request: Request) {
       suggestions,
       versionGroupId: resume.versionGroupId || undefined,
       versionNumber,
-      ...(aiResult?.missingSkills?.length && { aiMissingSkills: aiResult.missingSkills.join(", ") }),
-      ...(aiResult?.suggestions?.length && { aiSuggestions: aiResult.suggestions.join("\n") }),
-      ...(aiResult?.summaryOptimization && { aiSummary: aiResult.summaryOptimization }),
-      ...(aiResult?.interviewQuestions?.length && { aiInterviewQuestions: aiResult.interviewQuestions.join("\n") }),
+      ...(aiRateLimited && { aiWarning: "AI analysis is temporarily rate-limited. Results will be available later." }),
+      ...(!aiRateLimited && aiResult?.missingSkills?.length && { aiMissingSkills: aiResult.missingSkills.join(", ") }),
+      ...(!aiRateLimited && aiResult?.suggestions?.length && { aiSuggestions: aiResult.suggestions.join("\n") }),
+      ...(!aiRateLimited && aiResult?.summaryOptimization && { aiSummary: aiResult.summaryOptimization }),
+      ...(!aiRateLimited && aiResult?.interviewQuestions?.length && { aiInterviewQuestions: aiResult.interviewQuestions.join("\n") }),
       ...(jdKeywords.length > 0 && { jdKeywords }),
       ...(diagnostic && { diagnostic }),
     };

@@ -5,15 +5,16 @@ export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
+  try {
+    const { id } = await params;
 
-  const resume = await prisma.resume.findUnique({ where: { id } });
-  if (!resume) {
-    return NextResponse.json(
-      { success: false, message: "Resume not found" },
-      { status: 404 }
-    );
-  }
+    const resume = await prisma.resume.findUnique({ where: { id } });
+    if (!resume) {
+      return NextResponse.json(
+        { success: false, message: "Resume not found" },
+        { status: 404 }
+      );
+    }
 
   const matchedCount = resume.keywords
     ? resume.keywords.split(", ").filter(Boolean).length
@@ -117,4 +118,8 @@ export async function GET(
       "Content-Disposition": `attachment; filename="ATS-Report-${resume.fileName.replace(/\.pdf$/i, "")}.html"`,
     },
   });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Internal server error";
+    return NextResponse.json({ success: false, message }, { status: 500 });
+  }
 }

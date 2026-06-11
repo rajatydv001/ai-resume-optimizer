@@ -2,12 +2,11 @@ import { prisma } from "@/lib/prisma";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import AtsScoreCard from "@/components/AtsScoreCard";
 import ResumeRewriter from "@/components/ResumeRewriter";
 import SkillGapChart from "@/components/SkillGapChart";
 import ScoreTrendChart from "@/components/ScoreTrendChart";
 import DeleteResumeButton from "@/components/DeleteResumeButton";
-import { Download, Sparkles, Upload, TrendingUp, ArrowUp, ArrowDown, Minus, Wand2, Lightbulb, Target, MessageSquare, ArrowLeft, ChevronRight } from "lucide-react";
+import { Download, Sparkles, Upload, TrendingUp, ArrowUp, ArrowDown, Minus, Wand2, Target, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 export default async function ResumeReport({ params }: { params: Promise<{ id: string }> }) {

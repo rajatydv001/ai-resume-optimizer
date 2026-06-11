@@ -204,6 +204,10 @@ export function extractKeywords(jd: string): string[] {
     }
   }
 
+  // Split sentence-ending periods concatenated to next word (e.g. "code.Core" -> "code. Core")
+  // but preserve tech names with lowercase after dots like "Node.js"
+  jd = jd.replace(/([a-z])\.([A-Z])/g, "$1. $2");
+
   // Tokenize — keep raw for sentence detection, cleaned for matching
   const rawTokens = jd
     .replace(/[^a-zA-Z0-9+#.\s-]/g, " ")

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BarChart3, Sparkles, Target, TrendingUp, MessageSquare, FileSearch, ChevronRight } from "lucide-react";
+import { ArrowRight, BarChart3, Sparkles, Target, MessageSquare } from "lucide-react";
 
 const stagger = {
   hidden: { opacity: 0 },

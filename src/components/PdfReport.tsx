@@ -235,7 +235,6 @@ interface PdfReportProps {
   keywords: string | null;
   missingKeywords: string | null;
   suggestions: string | null;
-  jobDescription: string | null;
   jdKeywords: string | null;
   aiMissingSkills: string | null;
   aiSuggestions: string | null;
@@ -260,7 +259,6 @@ export function PdfReport({
   keywords,
   missingKeywords,
   suggestions,
-  jobDescription,
   jdKeywords,
   aiMissingSkills,
   aiSuggestions,

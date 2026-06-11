@@ -17,6 +17,7 @@ export interface UploadResult {
     size: number;
     isPDF: boolean;
   };
+  aiWarning?: string;
   aiMissingSkills?: string;
   aiSuggestions?: string;
   aiSummary?: string;

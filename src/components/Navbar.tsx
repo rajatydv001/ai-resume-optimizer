@@ -28,7 +28,7 @@ export default function Navbar() {
               key={link.href}
               href={link.href}
               className={cn(
-                "rounded-md px-2.5 py-1.5 text-sm font-medium transition-all duration-150",
+                "rounded-md px-3 py-2 text-sm font-medium transition-all duration-150",
                 pathname === link.href
                   ? "bg-muted/60 text-foreground"
                   : "text-muted-foreground/70 hover:text-foreground"

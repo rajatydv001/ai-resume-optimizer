@@ -54,11 +54,11 @@ export default function ResumeRewriter({ resumeId, fileName }: Props) {
 
   return (
     <div className="space-y-4">
-      <div className="card-ui-solid flex items-center justify-between p-4">
-        <div className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-400" /><div><p className="text-sm font-medium text-green-400">Resume rewritten successfully</p><p className="text-xs text-muted-foreground/60">Download your optimized resume</p></div></div>
-        <div className="flex gap-2">
-          <Button size="sm" variant="outline" onClick={() => handleExport("docx")} disabled={exporting === "docx"}>{exporting === "docx" ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <FileText className="mr-1.5 h-3.5 w-3.5" />}DOCX</Button>
-          <Button size="sm" onClick={() => handleExport("pdf")} disabled={exporting === "pdf"}>{exporting === "pdf" ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <FileDown className="mr-1.5 h-3.5 w-3.5" />}PDF</Button>
+      <div className="card-ui-solid flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4">
+        <div className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-400 shrink-0" /><div><p className="text-sm font-medium text-green-400">Resume rewritten successfully</p><p className="text-xs text-muted-foreground/60">Download your optimized resume</p></div></div>
+        <div className="flex gap-2 w-full sm:w-auto">
+          <Button size="sm" variant="outline" onClick={() => handleExport("docx")} disabled={exporting === "docx"} className="flex-1 sm:flex-none">{exporting === "docx" ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <FileText className="mr-1.5 h-3.5 w-3.5" />}DOCX</Button>
+          <Button size="sm" onClick={() => handleExport("pdf")} disabled={exporting === "pdf"} className="flex-1 sm:flex-none">{exporting === "pdf" ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <FileDown className="mr-1.5 h-3.5 w-3.5" />}PDF</Button>
         </div>
       </div>
 

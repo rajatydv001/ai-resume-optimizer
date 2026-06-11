@@ -45,12 +45,12 @@ export default async function ResumeReport({ params }: { params: Promise<{ id: s
         <Link href="/resumes" className="inline-flex items-center gap-1 text-xs text-muted-foreground/60 hover:text-foreground transition-colors mb-3">
           <ArrowLeft className="h-3 w-3" /> Back to all resumes
         </Link>
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-xl font-bold tracking-tight">{resume.fileName.replace(/\.pdf$/i, "")}{totalV > 1 && <span className="text-muted-foreground/50 font-normal ml-1">v{vn}</span>}</h1>
+        <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-lg sm:text-xl font-bold tracking-tight">{resume.fileName.replace(/\.pdf$/i, "")}{totalV > 1 && <span className="text-muted-foreground/50 font-normal ml-1">v{vn}</span>}</h1>
             <p className="text-sm text-muted-foreground/60 mt-0.5">{resume.jobRole || "N/A"} &middot; {resume.keywordSource === "jd" ? "JD-based" : "Role-based"}</p>
           </div>
-          <div className="flex gap-2 shrink-0">
+          <div className="flex flex-wrap items-center gap-2">
             {resume.versionGroupId && <Link href={`/upload?resumeId=${resume.versionGroupId}`}><Button variant="outline" size="sm"><Upload className="mr-1 h-3.5 w-3.5" />New Version</Button></Link>}
             <Link href={`/api/resumes/${id}/download-pdf`} download><Button size="sm"><Download className="mr-1 h-3.5 w-3.5" />Export PDF</Button></Link>
             <DeleteResumeButton resumeId={id} fileName={resume.fileName} />
@@ -59,18 +59,18 @@ export default async function ResumeReport({ params }: { params: Promise<{ id: s
       </div>
 
       {/* KPI row */}
-      <div className="grid gap-px overflow-hidden rounded-xl border border-border/30 bg-border/30 mb-6 sm:grid-cols-5">
-        <div className="bg-card p-4 text-center">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-px overflow-hidden rounded-xl border border-border/30 bg-border/30 mb-6">
+        <div className="bg-card p-3 sm:p-4 text-center">
           <p className="section-label">ATS Score</p>
-          <div className="flex items-center justify-center gap-2 mt-1">
+          <div className="flex items-center justify-center gap-1.5 sm:gap-2 mt-1">
             <span className="kpi-value">{resume.atsScore || 0}</span>
             <span className={"text-[10px] font-medium px-1.5 py-0.5 rounded " + ((resume.atsScore || 0) >= 90 ? "badge-green" : (resume.atsScore || 0) >= 70 ? "badge-yellow" : "badge-red")}>{(resume.atsScore || 0) >= 90 ? "Excellent" : (resume.atsScore || 0) >= 70 ? "Good" : "Needs Work"}</span>
           </div>
         </div>
-        <div className="bg-card p-4 text-center"><p className="section-label">Keyword Match</p><p className="kpi-value mt-1">{pct}%</p><p className="kpi-label mt-0.5">{matched}/{total} keywords</p></div>
-        <div className="bg-card p-4 text-center"><p className="section-label">Matched</p><p className="kpi-value mt-1 text-green-400">{matched}</p><p className="kpi-label mt-0.5">keywords found</p></div>
-        <div className="bg-card p-4 text-center"><p className="section-label">Missing</p><p className="kpi-value mt-1 text-red-400">{missing}</p><p className="kpi-label mt-0.5">to improve</p></div>
-        <div className="bg-card p-4 text-center"><p className="section-label">Progression</p>{totalV > 1 ? <><p className={"kpi-value mt-1 " + (delta > 0 ? "text-green-400" : delta < 0 ? "text-red-400" : "text-muted-foreground")}>{delta > 0 ? "+" : ""}{delta}</p><p className="kpi-label mt-0.5">from v{vn - 1}</p></> : <><p className="kpi-value mt-1 text-muted-foreground">--</p><p className="kpi-label mt-0.5">upload more</p></>}</div>
+        <div className="bg-card p-3 sm:p-4 text-center"><p className="section-label">Match</p><p className="kpi-value mt-1">{pct}%</p><p className="kpi-label mt-0.5">{matched}/{total} kw</p></div>
+        <div className="bg-card p-3 sm:p-4 text-center"><p className="section-label">Matched</p><p className="kpi-value mt-1 text-green-400">{matched}</p><p className="kpi-label mt-0.5">found</p></div>
+        <div className="bg-card p-3 sm:p-4 text-center"><p className="section-label">Missing</p><p className="kpi-value mt-1 text-red-400">{missing}</p><p className="kpi-label mt-0.5">gaps</p></div>
+        <div className="bg-card p-3 sm:p-4 text-center col-span-3 sm:col-span-1"><p className="section-label">Trend</p>{totalV > 1 ? <><p className={"kpi-value mt-1 " + (delta > 0 ? "text-green-400" : delta < 0 ? "text-red-400" : "text-muted-foreground")}>{delta > 0 ? "+" : ""}{delta}</p><p className="kpi-label mt-0.5">v{vn - 1}</p></> : <><p className="kpi-value mt-1 text-muted-foreground">--</p><p className="kpi-label mt-0.5">upload more</p></>}</div>
       </div>
 
       {/* Charts + AI Insights grid */}

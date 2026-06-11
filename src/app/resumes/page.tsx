@@ -119,15 +119,20 @@ export default function ResumesPage() {
             {/* Rows */}
             <motion.div variants={stagger} initial="hidden" animate="visible" className="divide-y divide-border/30">
               {resumes.map((r) => (
-                <motion.div key={r.id} variants={fadeUp} className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 px-5 py-4 transition-colors hover:bg-muted/20">
+                <motion.div key={r.id} variants={fadeUp} className="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 px-5 py-4 transition-colors hover:bg-muted/20">
                   {/* Mobile: card style */}
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-blue-bg shrink-0">
                       <span className="text-xs font-bold text-accent-blue">{r.atsScore || 0}</span>
                     </div>
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium truncate">{r.fileName}</p>
-                      {r.jobRole && <p className="text-xs text-muted-foreground/60 capitalize">{r.jobRole}</p>}
+                      <div className="flex items-center gap-2 mt-0.5 sm:hidden">
+                        <span className="text-[10px] text-muted-foreground/60">{r.keywords ? r.keywords.split(", ").length : 0} matched</span>
+                        <span className="text-[10px] text-red-400/80">{r.missingKeywords ? r.missingKeywords.split(", ").length : 0} missing</span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-muted/60 text-muted-foreground/70">{r.keywordSource === "jd" ? "JD" : "Role"}</span>
+                      </div>
+                      {r.jobRole && <p className="text-xs text-muted-foreground/60 capitalize hidden sm:block">{r.jobRole}</p>}
                     </div>
                   </div>
 
@@ -141,10 +146,10 @@ export default function ResumesPage() {
 
                   {/* Actions */}
                   <div className="flex items-center gap-2 sm:w-20 sm:justify-end">
-                    <Link href={`/resumes/${r.id}`}><Button variant="outline" size="sm" className="h-8"><ChevronRight className="h-3.5 w-3.5" /></Button></Link>
+                    <Link href={`/resumes/${r.id}`}><Button variant="outline" size="sm" className="h-9 min-w-[44px]"><ChevronRight className="h-4 w-4" /></Button></Link>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <button disabled={deletingId === r.id} className="rounded-lg p-1.5 text-muted-foreground/40 transition-colors hover:bg-destructive/10 hover:text-destructive disabled:opacity-50" onClick={() => setDeleteTarget(r)}><Trash2 className="h-3.5 w-3.5" /></button>
+                        <button disabled={deletingId === r.id} className="rounded-lg p-2 text-muted-foreground/40 transition-colors hover:bg-destructive/10 hover:text-destructive disabled:opacity-50" onClick={() => setDeleteTarget(r)}><Trash2 className="h-4 w-4" /></button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader><AlertDialogTitle>Delete Resume</AlertDialogTitle><AlertDialogDescription>Are you sure you want to delete &quot;{r.fileName}&quot;? This action cannot be undone.</AlertDialogDescription></AlertDialogHeader>
@@ -159,12 +164,12 @@ export default function ResumesPage() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 mt-6">
-              <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => fetchResumes(page - 1, search)}><ChevronLeft className="h-4 w-4" /></Button>
+            <div className="flex items-center justify-center gap-1 sm:gap-2 mt-6">
+              <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => fetchResumes(page - 1, search)} className="h-9 min-w-[44px]"><ChevronLeft className="h-4 w-4" /></Button>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                <Button key={p} variant={p === page ? "default" : "outline"} size="sm" onClick={() => fetchResumes(p, search)} className="min-w-[36px]">{p}</Button>
+                <Button key={p} variant={p === page ? "default" : "outline"} size="sm" onClick={() => fetchResumes(p, search)} className="min-w-[44px] h-9">{p}</Button>
               ))}
-              <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => fetchResumes(page + 1, search)}><ChevronRightIcon className="h-4 w-4" /></Button>
+              <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => fetchResumes(page + 1, search)} className="h-9 min-w-[44px]"><ChevronRightIcon className="h-4 w-4" /></Button>
             </div>
           )}
         </motion.div>

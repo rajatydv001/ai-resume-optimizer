@@ -47,15 +47,15 @@ export default function Home() {
             Upload your resume, analyze your ATS score, find missing keywords, and get
             actionable suggestions to optimize for any job.
           </p>
-          <div className="mt-8 flex items-center justify-center gap-3">
-            <Link href="/upload">
-              <Button size="default">
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link href="/upload" className="w-full sm:w-auto">
+              <Button size="default" className="w-full sm:w-auto">
                 Upload Resume
                 <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
               </Button>
             </Link>
-            <Link href="/resumes">
-              <Button variant="outline" size="default">
+            <Link href="/resumes" className="w-full sm:w-auto">
+              <Button variant="outline" size="default" className="w-full sm:w-auto">
                 View History
               </Button>
             </Link>
@@ -63,7 +63,7 @@ export default function Home() {
         </motion.div>
 
         {/* Stats */}
-        <motion.div variants={fadeUp} className="mt-16 grid grid-cols-3 gap-8 border-y border-border/30 py-6">
+        <motion.div variants={fadeUp} className="mt-16 grid grid-cols-3 gap-4 sm:gap-8 border-y border-border/30 py-6">
           {stats.map((s) => (
             <div key={s.label} className="text-center">
               <p className="text-2xl font-semibold tracking-tight">{s.value}</p>

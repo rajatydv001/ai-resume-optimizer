@@ -146,7 +146,7 @@ export default function UploadPage() {
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 className={
-                  "relative flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-10 transition-all duration-300 " +
+                  "relative flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 sm:p-10 transition-all duration-300 " +
                   (dragOver ? "border-accent-blue/60 bg-accent-blue-bg/30 scale-[1.01]" :
                    file ? "border-accent-blue/30 bg-accent-blue-bg/15" :
                    "border-border/30 bg-muted/10 hover:border-accent-blue/30 hover:bg-accent-blue-bg/10")
@@ -243,20 +243,22 @@ export default function UploadPage() {
       {/* Results */}
       {result && (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-12 space-y-5">
-          <div className="card-ui-solid flex items-center gap-4 p-4 sm:p-5">
-            <AtsScoreCard score={result.atsScore} size="sm" />
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium">{result.fileName}</p>
-              <p className="text-xs text-muted-foreground/60 capitalize mt-0.5">
-                {result.jobRole} &middot; v{result.versionNumber || 1}
-                {result.keywordSource === "jd" ? " \u00B7 JD-based" : " \u00B7 Role-based"}
-              </p>
+          <div className="card-ui-solid flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 sm:p-5">
+            <div className="flex items-center gap-4 w-full sm:w-auto">
+              <AtsScoreCard score={result.atsScore} size="sm" />
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium">{result.fileName}</p>
+                <p className="text-xs text-muted-foreground/60 capitalize mt-0.5">
+                  {result.jobRole} &middot; v{result.versionNumber || 1}
+                  {result.keywordSource === "jd" ? " \u00B7 JD-based" : " \u00B7 Role-based"}
+                </p>
+              </div>
             </div>
-            <Link href={`/resumes/${result.resumeId}`}><Button variant="outline" size="sm">Full Report <ChevronRight className="ml-1 h-3 w-3" /></Button></Link>
+            <Link href={`/resumes/${result.resumeId}`} className="w-full sm:w-auto"><Button variant="outline" size="sm" className="w-full sm:w-auto">Full Report <ChevronRight className="ml-1 h-3 w-3" /></Button></Link>
           </div>
 
           <Tabs defaultValue="overview">
-            <TabsList className="w-full justify-start bg-muted/20 p-0.5 rounded-lg border border-border/30">
+            <TabsList className="w-full justify-start overflow-x-auto bg-muted/20 p-0.5 rounded-lg border border-border/30">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="keywords">Keywords</TabsTrigger>
               {(result.aiMissingSkills || result.aiSuggestions || result.aiSummary || result.aiInterviewQuestions) && <TabsTrigger value="ai">AI Analysis</TabsTrigger>}

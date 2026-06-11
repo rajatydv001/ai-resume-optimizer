@@ -29,7 +29,7 @@ export default function DeleteResumeButton({ resumeId, fileName }: Props) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline" size="sm" className="text-destructive/70 hover:text-destructive"><Trash2 className="mr-1 h-3.5 w-3.5" />Delete</Button>
+        <Button variant="outline" size="sm" className="text-destructive/70 hover:text-destructive h-9"><Trash2 className="mr-1 h-3.5 w-3.5" />Delete</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
